@@ -14,13 +14,30 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   
   final _usernameController = TextEditingController();
+  
   final _preferencesService = PreferencesService();
   var _selectedGender = Gender.FEMALE;
   var _selectedLanguages = Set<Languages>();
   var _isEmployed = true;
 
+  void _populateFields() async{
+    final settings = await _preferencesService.getSettings();
+
+    setState(() {
+      _usernameController.text = settings.username;
+      _selectedGender = settings.gender;
+      _selectedLanguages = settings.languages;
+      _isEmployed = _isEmployed;
+    });
+  }
 
   @override
+  
+  void initState(){
+    super.initState();
+    _populateFields();
+  }
+  
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
